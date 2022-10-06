@@ -176,7 +176,7 @@ jobs:
       - attach_workspace:
           at: ~/
       - add_ssh_keys:
-          fingerprints: ["bd:13:97:51:20:28:ac:1b:41:54:21:93:45:d9:bf:cb"]
+          fingerprints: ["fc:be:3e:d8:57:97:bc:15:3d:18:de:78:35:68:1f:22"]
       - run:
           name: Install dependencies
           command: |
