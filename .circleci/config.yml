@@ -9,20 +9,20 @@ commands:
       - run:
         name: Install AWS CLI V2
         command: |
-        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-        unzip awscliv2.zip
-        sudo ./aws/install
+         curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+         unzip awscliv2.zip
+         sudo ./aws/install
   install_ansible:
     description: Install ansible V2
     setps:
       - run:
         name: Install Ansible  V2
         command: |
-         sudo apt update
-         sudo apt install software-properties-common
-         sudo add-apt-repository --yes --update ppa:ansible/ansible
-         sudo apt install ansible
-         
+          sudo apt update
+          sudo apt install software-properties-common
+          sudo add-apt-repository --yes --update ppa:ansible/ansible
+          sudo apt install ansible
+          
   install_nodejs:
     description: Install Node.js 13.8.0
     steps:
