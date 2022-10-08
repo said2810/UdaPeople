@@ -187,19 +187,29 @@ jobs:
             aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> ~/inventory
       - persist_to_workspace:
           root: ~/
-          paths: inventory
+          paths:
+            - project/.circleci/ansible/inventory.txt
       - destroy_environment
 
   configure-infrastructure:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: cimg/python:3.10
     steps:
       - checkout
       - run: apk add --update tar gzip
       - attach_workspace:
           at: ~/
+      - run:
+        name:
+        command: |
+          cd .circleci/ansible
+          cat inventory.txt  
+
+          ansible-playbook -i inventory.txt configure-server.yml
+      - destroy-environment      
       - add_ssh_keys:
           fingerprints: ["bf:0f:7b:db:11:7f:53:db:39:2c:2a:3a:39:ff:09:a1"]
+      
       - run:
           name: Install dependencies
           command: |
