@@ -170,7 +170,7 @@ jobs:
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
               
       - run:
-          name: Add back-end Ip to Ansible inventory
+          name: Add Backend Ip to Ansible inventory
           command: |
             yum install -y tar gzip
             echo [all] > ~/inventory
