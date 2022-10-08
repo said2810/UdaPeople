@@ -27,11 +27,11 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS=$(curl --insecure  https://kvdb.io/JBatMEU1HHtfKNevgH6ypU/migration_<< parameters.Workflow_ID >>)
+            SUCCESS=$(curl --insecure  https://kvdb.io/Yb81p1jNcDxvSTuh15zcJX/migration_<< parameters.Workflow_ID >>)
             # Logic for reverting the database state
             if (( $SUCCESS == 1 ));
             then
-              cd ~/project/backend
+              cd ~/projects/backend
               npm install
               npm run migration:revert
             fi
@@ -177,7 +177,7 @@ jobs:
             aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> ~/inventory
       - persist_to_workspace:
           root: ~/
-          paths: /Users/Sa3iid/projects/UdaPeople/.circleci/ansible/inventory
+          paths: inventory
       - destroy_environment
 
   configure-infrastructure:
@@ -223,10 +223,10 @@ jobs:
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
 
-      - run:
-          name: Send migration results to memstash
+      - run: 
+          name: Send migration results to kvdb.io
           command: |
-            if grep -q "has been executed successfully." migrations_dump.txt
+            if grep -q "has been executed successfully." ~/projects/backend/migrations_dump.txt
             then
               # If you are using kvdb.io, generate the bucket ID "Yb81p1jNcDxvSTuh15zcJX" in your local terminal first
               curl -d '1' https://kvdb.io/Yb81p1jNcDxvSTuh15zcJX/migration_${CIRCLE_WORKFLOW_ID:0:7}  
