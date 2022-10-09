@@ -45,7 +45,7 @@ commands:
               npm install
               npm run migration:revert
             fi
-  destroy_environment:
+  destroy-environment:
     steps:
       - run:
           name: Destroy environment
@@ -189,7 +189,7 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      - destroy_environment
+      - destroy-environment
 
   configure-infrastructure:
     docker:
@@ -209,7 +209,7 @@ jobs:
           name: Configure server
           command: |
             ansible-playbook .circleci/ansible/configure-server.yml -i ~/inventory.txt
-      - destroy_environment
+      - destroy-environment
 
   run-migrations:
     docker:
@@ -243,7 +243,7 @@ jobs:
               curl -d '1' https://kvdb.io/Yb81p1jNcDxvSTuh15zcJX/migration_${CIRCLE_WORKFLOW_ID:0:7}  
             fi
       - revert-migrations
-      - destroy_environment
+      - destroy-environment
 
 
 
@@ -278,7 +278,7 @@ jobs:
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-      - destroy_environment
+      - destroy-environment
 
   deploy-backend:
     docker:
@@ -318,7 +318,7 @@ jobs:
             echo "Contents  of the inventory file is -------"
             cat ~/inventory
             ansible-playbook -i ~/inventory deploy-backend.yml
-      - destroy_environment   
+      - destroy-environment   
       - revert-migrations 
   smoke-test:
     docker:
@@ -352,7 +352,7 @@ jobs:
             else
               exit 1
             fi 
-      - destroy_environment
+      - destroy-environment
       - revert-migrations
   cloudfront-update:
     docker:
@@ -374,7 +374,7 @@ jobs:
             --stack-name InitialStack \
             --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
             --tags project=udapeople
-      - destroy_environment
+      - destroy-environment
       - revert-migrations  
       
   cleanup:
