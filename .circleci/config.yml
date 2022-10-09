@@ -298,7 +298,7 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       - add_ssh_keys:
-          fingerprints: ["bd:13:97:51:20:28:ac:1b:41:54:21:93:45:d9:bf:cb"]
+          fingerprints: ["bf:0f:7b:db:11:7f:53:db:39:2c:2a:3a:39:ff:09:a1"]
       - run:
           name: Deploy backend
           command: |
@@ -365,7 +365,7 @@ jobs:
             yum install -y curl
             export OLD_WORKFLOW_ID=$(aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text)
             echo "Old Wokflow ID: $OLD_WORKFLOW_ID"
-            curl https://kvdb.io/JBatMEU1HHtfKNevgH6ypU/old_workflow_id-2 -d "${OLD_WORKFLOW_ID}"
+            curl https://kvdb.io/Yb81p1jNcDxvSTuh15zcJX/old_workflow_id-2 -d "${OLD_WORKFLOW_ID}"
       - run:
           name: Update cloudfront distribution
           command: |
@@ -386,7 +386,7 @@ jobs:
           name: Remove old stacks and files
           command: |
             yum install -y curl         
-            export OLDWORKFLOWID=$(curl --insecure https://kvdb.io/JBatMEU1HHtfKNevgH6ypU/old_workflow_id-2)
+            export OLDWORKFLOWID=$(curl --insecure https://kvdb.io/Yb81p1jNcDxvSTuh15zcJX/old_workflow_id-2)
             echo Old Workflow ID: $OLDWORKFLOWID 
             # Fetch the stack names 
             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
