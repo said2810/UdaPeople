@@ -3,6 +3,7 @@ version: 2.1
 orbs: 
   slack: circleci/slack@4.10.1
 commands:
+  
 
   install_ansible:
     description: Install Ansible
@@ -44,7 +45,7 @@ commands:
               npm install
               npm run migration:revert
             fi
-  destroy_environment:
+  destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
       Workflow_ID:
@@ -293,10 +294,10 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update tar gzip curl nodejs npm ansible
-            apk add --no-cache python3 py3-pip 
-            pip3 install --upgrade pip 
-            pip3 install --no-cache-dir awscli 
-            rm -rf /var/cache/apk/*
+            #apk add --no-cache python3 py3-pip 
+            #pip3 install --upgrade pip 
+            #pip3 install --no-cache-dir awscli 
+            #rm -rf /var/cache/apk/*
       - attach_workspace:
           at: ~/
       - restore_cache:
