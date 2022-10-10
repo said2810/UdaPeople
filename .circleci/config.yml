@@ -4,15 +4,7 @@ orbs:
   slack: circleci/slack@4.10.1
 commands:
   
-  install_awscli:
-    description: Install AWS CLI 
-    steps:
-      - run:
-        name: Install aws cli
-        command: |
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip awscliv2.zip
-            sudo ./aws/install  
+  
 
   install_ansible:
     description: Install Ansible
@@ -21,6 +13,17 @@ commands:
           name: Install Ansible
           command: |
             python3 -m pip install --user ansible
+            
+   install_awscli:
+    description: Install AWS CLI 
+    steps:
+      - run:
+        name: Install aws cli
+        command: |
+            sudo apt-get update && sudo apt-get install -yy less
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install           
 
   install_nodejs:
     description: Install Node.js 13.8.0
