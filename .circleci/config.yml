@@ -186,16 +186,11 @@ jobs:
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
               
       - run:
-          name: Add back-end ip to ansible inventory
+          name: Add Backend Ip to Ansible inventory
           command: |
             yum install -y tar gzip
-            
-            BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
-              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text)
-            echo $BACKEND_PUBLIC_IP >> .circleci/ansible/inventory.txt
-            cat .circleci/ansible/inventory.txt
+            echo [all] > ~/inventory
+            aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> ~/inventory
       - persist_to_workspace:
           root: ~/
           paths:
@@ -267,7 +262,7 @@ jobs:
       - restore_cache:
           keys: [frontend-build]
       - run:
-          name: Install Dependencies
+          name: Install dependencies
           command: |
             sudo apt-get update && sudo apt-get install -yy less
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -276,10 +271,10 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            export BACKEND_PUBLIC_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
-            export API_URL="http://${BACKEND_PUBLIC_IP}:3030"
+            export BACKEND_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+            export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
-            echo API_URL="http://${BACKEND_PUBLIC_IP}:3030" >> frontend/.env
+            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
             cat frontend/.env
       - run:
           name: Deploy frontend objects
@@ -303,7 +298,7 @@ jobs:
             sudo apt-get update && sudo apt-get install -yy less
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
-            sudo ./aws/install     
+            sudo ./aws/install    
       - install_ansible
       - install_nodejs
       - add_ssh_keys:
@@ -336,8 +331,8 @@ jobs:
 
             cd .circleci/ansible
             echo "Contents  of the inventory file is -------"
-            cat ~/inventory.txt
-            ansible-playbook -i ~/inventory.txt deploy-backend.yml
+            cat inventory.txt
+            ansible-playbook -i inventory.txt deploy-backend.yml
 
       - destroy-environment   
       - revert-migrations 
@@ -351,13 +346,10 @@ jobs:
           command: |
             yum install -y curl
       - run:
-          name: Backend smoke test
+          name: Backend smoke test.
           command: |
-            BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
-              --filters "Name=tag:Name,Values=backend-<IDENTIFIER>" \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text)
-            export API_URL="http://${BACKEND_PUBLIC_IP}:3030"
+            export BACKEND_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+            export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
             if curl "${API_URL}/api/status" | grep "ok"
             then
@@ -366,15 +358,15 @@ jobs:
                 exit 1
             fi
       - run:
-          name: Frontend smoke test
+          name: Frontend smoke test.
           command: |
-            FRONTEND_URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"            
-            echo ${FRONTEND_URL} 
-            if curl -s ${FRONTEND_URL} | grep "Welcome"
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"            
+            echo ${URL} 
+            if curl -s ${URL} | grep "Welcome"
             then
               exit 0
             else
-              exit 1 
+              exit 1
             fi 
       - destroy-environment
       - revert-migrations
