@@ -204,7 +204,7 @@ jobs:
       - checkout
       - run: apk add --update tar gzip
       - attach_workspace:
-          at: ~/
+          at: ~/inventory.txt
       - add_ssh_keys:
           fingerprints: ["bf:0f:7b:db:11:7f:53:db:39:2c:2a:3a:39:ff:09:a1"]
       - run:
