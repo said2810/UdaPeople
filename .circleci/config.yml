@@ -186,10 +186,12 @@ jobs:
       - run:
           name: Add Backend Ip to Ansible inventory
           command: |
-            echo " " >> inventory.txt
-            echo "$(aws ec2 describe-instances --filters "Name=tag:aws:cloudformation:logical-id,Values=EC2Instance" --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)" >> inventory.txt  
-            cat inventory.txt
-
+            BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
+              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --output text)
+            echo $BACKEND_PUBLIC_IP >> .circleci/ansible/inventory.txt
+            cat .circleci/ansible/inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
@@ -213,7 +215,7 @@ jobs:
   #     - run:
   #         name: Configure server
   #         command: |
-  #           ansible-playbook -i ~/inventory.txt .circleci/ansible/configure-server.yml 
+  #           ansible-playbook .circleci/ansible/configure-server.yml -i ~/inventory.txt
   #     - destroy-environment
 
   # run-migrations:
