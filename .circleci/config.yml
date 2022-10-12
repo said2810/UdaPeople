@@ -296,6 +296,7 @@ jobs:
       - image: cimg/python:3.10
     steps:
       - checkout
+      - run: sudo apt-get install tar gzip -y
       - run: 
           name: Install aws_cli
           command: |

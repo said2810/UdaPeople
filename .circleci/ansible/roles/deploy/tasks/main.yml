@@ -31,18 +31,18 @@
 
 - name: Creates directory
   file:
-    path: cd ~/backend-artifact
+    path: ~/backend-artifact
     state: directory
 
 - name: "Unarchive"
   unarchive:
     src: artifact.tar.gz
-    dest: cd ~/backend-artifact
+    dest: ~/backend-artifact
 
 
 - name: "Executing Node app with PM2"
   shell: |
-    cd ~/backend-artifact/dist
+    cd ~/backend-artifact/backend/dist
     pm2 stop default
     pm2 start main.js
   register: execute_node
