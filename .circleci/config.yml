@@ -290,7 +290,7 @@ jobs:
     steps:
       - checkout
       - run: 
-          name: Install aws cli
+          name: Install aws_cli
           command: |
             #test
             sudo apt-get update && sudo apt-get install -yy less
