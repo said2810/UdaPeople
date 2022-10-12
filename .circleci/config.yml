@@ -296,7 +296,7 @@ jobs:
       - image: python:3.7-alpine3.11
     steps:
       - checkout
-      -run:
+      - run:
           name: Install dependencies
           command: |
             apk add --update tar gzip curl nodejs npm ansible
