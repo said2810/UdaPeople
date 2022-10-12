@@ -296,6 +296,7 @@ jobs:
       - image: python:3.7-alpine3.11
     steps:
       - checkout
+      - run: sudo apt-get install tar gzip -y
       - run:
           name: Install dependencies
           command: |
@@ -304,7 +305,6 @@ jobs:
             #pip3 install --upgrade pip 
             #pip3 install --no-cache-dir awscli 
             #rm -rf /var/cache/apk/*
-      - run: sudo apt-get install tar gzip -y
       - run: 
           name: Install aws_cli
           command: |
