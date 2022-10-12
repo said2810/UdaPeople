@@ -42,10 +42,15 @@
 
 - name: "Executing Node app with PM2"
   shell: |
-    cd ~/backend-artifact/backend/dist
+    cd ~/backend-artifact/dist
     pm2 stop default
     pm2 start main.js
+
   register: execute_node
+
+- name: print message
+  debug:
+    msg: "{{ execute_node.stdout_lines }}"
 
 - name: print message
   debug:
