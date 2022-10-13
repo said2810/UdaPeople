@@ -17,13 +17,13 @@
     pm2 stop default
     pm2 start npm -- start
   args:
-    chdir: /home/ubuntu/backend
+    chdir: /home/ansible/backend
   environment:
     ENVIRONMENT: production
     TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION') }}"
-    TYPEORM_MIGRATIONS_DIR: "/home/ubuntu/backend/dist/migrations"
-    TYPEORM_MIGRATIONS: "/home/ubuntu/backend/dist/migrations/*.js"
-    TYPEORM_ENTITIES: "/home/ubuntu/backend/dist/modules/domain/**/**/*.entity.js"
+    TYPEORM_MIGRATIONS_DIR: "/.circleci/ansible/backend/dist/migrations"
+    TYPEORM_MIGRATIONS: "/home/ansible/backend/dist/migrations/*.js"
+    TYPEORM_ENTITIES: "//home/ansible/backend/dist/modules/domain/**/**/*.entity.js"
     TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST') }}"
     TYPEORM_PORT: "{{ lookup('env', 'TYPEORM_PORT') }}"
     TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME') }}"
