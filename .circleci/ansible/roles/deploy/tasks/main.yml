@@ -43,6 +43,12 @@
   shell: |
     cd ~/backend-artifact/dist
     npm install
+  args:
+    chdir: "/home/ubuntu/backend-artifact"   
+- name: "run udapeople"
+  become: true
+  shell: |
+          npm run build
   environment:
     ENVIRONMENT: production
     TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION') }}"
