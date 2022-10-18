@@ -348,18 +348,19 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Install dependencies
-        command: |
-                  apk add --update curl 
-                  apk add --update rsync 
-                  apk add --update curl
-                  apk add --update openssh
-                  apk add --update openssh-client 
-                  pip3 install --upgrade pip 
-                  pip install awscli 
-                  aws --version 
-                  pwd
-                  ls -la
+          name: "Install curl"
+          command: |
+            yum install -y curl
+            apk add --update curl 
+            apk add --update rsync 
+            apk add --update curl
+            apk add --update openssh
+            apk add --update openssh-client 
+            pip3 install --upgrade pip 
+            pip install awscli 
+            aws --version 
+            pwd
+            ls -la
            
       - run:
           name: Backend smoke test.
