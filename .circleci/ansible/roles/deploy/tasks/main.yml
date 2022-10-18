@@ -46,8 +46,7 @@
 
 - name: "Executing Node app with PM2"
   shell: |
-- name: install ans start app
-  command:  pm2 start main.js
+    pm2 start main.js
   args:
     chdir: ~/home/ubuntu/backend-artifact/dist
   environment:
