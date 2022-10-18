@@ -41,7 +41,7 @@
 
 - name: "npm install"
   shell: |
-    cd ~/home/ubuntu/backend-artifact/dist
+    cd ~/backend-artifact/dist
     npm install
   environment:
     ENVIRONMENT: production
@@ -57,7 +57,7 @@
 
 - name: "Executing Node app with PM2"
   shell: |
-    cd ~/home/ubuntu/backend-artifact/dist
+    cd ~/backend-artifact/dist
     pm2 stop default
     pm2 start npm -- start
  
@@ -72,4 +72,6 @@
     msg: "{{ execute_node.stdout_lines }}"
 
 - name: "Configure pm2 to start as service"
-  command: npm install -g pm2@3.2.2
+  become: true
+  shell: |
+    env PATH=$PATH:/usr/local/bin pm2 startup systemd -u ubuntu --hp /home/ubuntu
