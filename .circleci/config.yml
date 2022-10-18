@@ -344,13 +344,22 @@ jobs:
       - revert-migrations 
   smoke-test:
     docker:
-      - image: amazon/aws-cli
+      - image: python:3.7-alpine3.11
     steps:
       - checkout
-      - run:
-          name: "Install curl"
+       - run:
+          name: Install dependencies
           command: |
-            yum install -y curl
+                    apk add --update curl 
+                    apk add --update rsync 
+                    apk add --update curl
+                    apk add --update openssh
+                    apk add --update openssh-client 
+                    pip3 install --upgrade pip 
+                    pip install awscli 
+                    aws --version 
+                    pwd
+                    ls -la
            
       - run:
           name: Backend smoke test.
