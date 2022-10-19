@@ -316,14 +316,14 @@ jobs:
       - run:
           name:
           command: |
-            cd /home/ubuntu/backend-artifact
+            cd backend
             npm install
       - run:
           name: Package backend
           command: |
-            cd /home/ubuntu/backend-artifact
+            cd backend
             npm run build
-            cd /home/ubuntu/backend-artifact
+            cd backend
             tar -czvf artifact.tar.gz dist/* package*
 
             cd .. 
