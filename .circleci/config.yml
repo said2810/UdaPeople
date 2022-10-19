@@ -314,34 +314,25 @@ jobs:
       - restore_cache:
           keys: [backend-deps]
       - run:
-          name:
-          command: |
-            cd ~/backend
-            npm install
-      - run:
-          name: Package-backend
-          command: |
-            cd ~/backend
-            npm run build
-            cd ~/backend
-            tar -czvf artifact.tar.gz dist/* package*
-
-            cd .. 
-            cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
-            
-      - run:
           name: Deploy backend
           command: |
+            cd backend
+            npm install
+            npm run build
+            tar -czvf artifact.tar.gz dist
+            cp artifact.tar.gz .circleci/ansible/roles/deploy/files
+            cd ..
+            # Zip the directory
+            tar -czvf artifact.tar.gz backend
+            cp artifact.tar.gz .circleci/ansible/roles/deploy/files
             export TYPEORM_MIGRATIONS_DIR=./migrations
             export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
             export TYPEORM_MIGRATIONS=./migrations/*.ts
-
             cd .circleci/ansible
             echo "Contents  of the inventory file is -------"
-            cat inventory.txt
-            ansible-playbook -i inventory.txt deploy-backend.yml
-
-      - destroy-environment   
+            cat ~/inventory
+            ansible-playbook -i ~/inventory deploy-backend.yml
+      - destroy_environment   
       - revert-migrations 
   smoke-test:
     docker:
