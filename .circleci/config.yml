@@ -332,7 +332,7 @@ jobs:
             echo "Contents  of the inventory file is -------"
             cat ~/inventory
             ansible-playbook -i ~/inventory deploy-backend.yml
-      - destroy_environment   
+      - destroy-environment   
       - revert-migrations 
   smoke-test:
     docker:
