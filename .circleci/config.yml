@@ -360,9 +360,9 @@ jobs:
             echo "API_URL = ${API_URL}"
             if curl "${API_URL}/api/status" | grep "ok"
             then
-                exit 0
-            else
                 exit 1
+            else
+                exit 2
             fi
       - run:
           name: Frontend smoke test.
