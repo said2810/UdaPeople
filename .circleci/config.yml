@@ -246,7 +246,7 @@ jobs:
             cat migrations_dump.txt
 
       - run: 
-          name: Send Migration-Results to kvdb.io
+          name: Send Migration Results to kvdb.io
           command: |
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
@@ -360,9 +360,9 @@ jobs:
             echo "API_URL = ${API_URL}"
             if curl "${API_URL}/api/status" | grep "ok"
             then
-                exit 1
+                exit 0
             else
-                exit 2
+                exit 1
             fi
       - run:
           name: Frontend smoke test.
@@ -371,7 +371,7 @@ jobs:
             echo ${URL} 
             if curl -s ${URL} | grep "Welcome"
             then
-              exit 0
+              exit 1
             else
               exit 1
             fi 
