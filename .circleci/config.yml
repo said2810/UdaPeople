@@ -217,7 +217,7 @@ jobs:
           command: |
             apk add --update ansible
       - run:
-          name: Configure server
+          name: Configure Server
           command: |
             ansible-playbook .circleci/ansible/configure-server.yml -i .circleci/ansible/inventory.txt
       - destroy-environment
@@ -251,7 +251,7 @@ jobs:
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
               # If you are using kvdb.io, generate the bucket ID "Yb81p1jNcDxvSTuh15zcJX" in your local terminal first
-              curl -d '1' https://kvdb.io/Yb81p1jNcDxvSTuh15zcJX/migration_${CIRCLE_WORKFLOW_ID:0:7}  
+              curl -d 'tamam' https://kvdb.io/Yb81p1jNcDxvSTuh15zcJX/migration_${CIRCLE_WORKFLOW_ID:0:7}  
             fi
       - revert-migrations
       - destroy-environment
@@ -416,7 +416,7 @@ jobs:
             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
             --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
             echo Stack names: "${STACKS[@]}"          
-            if [[ ${STACKS[@]} =~ ${OLDWORKFLOWID} ]]
+            if [[ "${STACKS[@]}" =~ ${OLDWORKFLOWID} ]]
             then
               aws s3 rm "s3://udapeople-${OLDWORKFLOWID}" --recursive
               aws cloudformation delete-stack --stack-name "udapeople-backend-${OLDWORKFLOWID}"
