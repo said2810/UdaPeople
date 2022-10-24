@@ -420,7 +420,7 @@ jobs:
             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
             --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
             echo Stack names: "${STACKS[@]}"           
-            if [[ "${OLD_WORKFLOW_ID}" =~ "${STACKS[@]}"  ]]
+            if [[ "${OLDWORKFLOWID}" =~ "${STACKS[@]}"  ]]
             then
               aws s3 rm "s3://udapeople-${OLDWORKFLOWID}" --recursive
               aws cloudformation delete-stack --stack-name "udapeople-backend-${OLDWORKFLOWID}"
